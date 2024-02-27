@@ -13,10 +13,10 @@ interface TArticleProps {
 }
 
 async function fetchArticleMetadata(articleId: number) {
-  if (!process.env.NEXT_NAVER_CAFE_ID) return undefined
+  if (!process.env.NAVER_CAFE_ID) return undefined
 
   const response = await fetchArticleAsync({
-    cafeId: Number.parseInt(process.env.NEXT_NAVER_CAFE_ID),
+    cafeId: Number.parseInt(process.env.NAVER_CAFE_ID),
     articleId,
   })
 
@@ -105,7 +105,7 @@ const sandboxes = [
 export default async function Article({
   params: { articleId },
 }: TArticleProps) {
-  const url = `https://cafe.naver.com/${process.env.NEXT_NAVER_CAFE_URL}/${articleId}`
+  const url = `https://cafe.naver.com/${process.env.NAVER_CAFE_URL}/${articleId}`
 
   const page = await fetchArticleMetadata(articleId)
   if (!page) {

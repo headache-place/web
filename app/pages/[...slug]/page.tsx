@@ -17,7 +17,7 @@ async function getPageFromParams(params: TPageProps["params"]) {
 export async function generateMetadata({ params }: TPageProps) {
   const defaultTitle = "두통과 함께하는 사람들"
   const defaultDescription =
-    "두통과 함께하는 사람들은 두통 환자와 보호자 등 두통에 관련된 다양한 사람들이 모일 수 있는 커뮤니티입니다."
+    "두통과 함께하는 사람들은 두통 환자와 보호자 등 두통에 관련된 다양한 사람들이 모일 수 있는 환자 모임입니다."
   const defaultKeywords = [
     "두통",
     "편두통",
@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: TPageProps) {
     "군발두통",
     "만성 두통",
     "환자 커뮤니티",
+    "환자 모임",
   ]
-
   const page = await getPageFromParams(params)
 
   // 페이지 정보를 가져올 수 없으면, 검색 엔진에 남아선 안 됨.
@@ -97,17 +97,11 @@ export default async function Page({ params }: TPageProps) {
       )} 작성`
 
   return (
-    <article className="mx-4">
+    <article className="prose mx-4 dark:prose-invert">
       <header>
-        <h1 className="mb-2 text-4xl font-extrabold text-foreground">
-          {page.title}
-        </h1>
-        {page.description && (
-          <p className="mb-6 mt-0 text-xl text-foreground">
-            {page.description}
-          </p>
-        )}
-        <p className="mb-3 mt-0 text-sm text-foreground">{formattedDate}</p>
+        <h1 className="mb-2">{page.title}</h1>
+        {page.description && <p className="mb-6 mt-0">{page.description}</p>}
+        <p className="mb-3 mt-0">{formattedDate}</p>
       </header>
       <hr className="my-6" />
       <Mdx code={page.body.code} />

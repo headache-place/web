@@ -10,7 +10,7 @@ interface RootLayoutProps {
 
 const defaultTitle = "두통과 함께하는 사람들"
 const description =
-  "두통과 함께하는 사람들은 두통 환자와 보호자 등 두통에 관련된 다양한 사람들이 모일 수 있는 커뮤니티입니다."
+  "두통과 함께하는 사람들은 두통 환자와 보호자 등 두통에 관련된 다양한 사람들이 모일 수 있는 환자 모임입니다."
 const defaultKeywords = [
   "두통",
   "편두통",
@@ -18,6 +18,7 @@ const defaultKeywords = [
   "군발두통",
   "만성 두통",
   "환자 커뮤니티",
+  "환자 모임",
 ]
 
 export const metadata = {
