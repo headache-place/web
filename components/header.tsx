@@ -1,10 +1,9 @@
 "use client"
 
 import { useState } from "react"
-
-import { MenuIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { MenuIcon } from "lucide-react"
 
 export function Header() {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
