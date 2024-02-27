@@ -1,4 +1,9 @@
-// TODO: Redirect to Each Naver Cafe Article and SEO (240226)
+import { Redirect } from "@/components/redirect"
+
 export default function Home() {
-  return <div></div>
+  return (
+    <Redirect
+      url={`https://cafe.naver.com/${process.env.NEXT_NAVER_CAFE_URL}`}
+    />
+  )
 }

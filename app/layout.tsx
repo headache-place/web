@@ -4,6 +4,10 @@ import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
 import { ThemeProvider } from "@/components/theme-provider"
 
+interface RootLayoutProps {
+  children: React.ReactNode
+}
+
 const defaultTitle = "두통과 함께하는 사람들"
 const description =
   "두통과 함께하는 사람들은 두통 환자와 보호자 등 두통에 관련된 다양한 사람들이 모일 수 있는 커뮤니티입니다."
@@ -100,10 +104,6 @@ export const metadata = {
       },
     ],
   },
-}
-
-interface RootLayoutProps {
-  children: React.ReactNode
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {

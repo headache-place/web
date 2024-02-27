@@ -28,8 +28,19 @@ export async function generateMetadata({ params }: TPageProps) {
   ]
 
   const page = await getPageFromParams(params)
+
+  // 페이지 정보를 가져올 수 없으면, 검색 엔진에 남아선 안 됨.
   if (!page) {
-    return undefined
+    return {
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    }
   }
 
   return {
@@ -43,8 +54,21 @@ export async function generateMetadata({ params }: TPageProps) {
       locale: "ko_KR",
       siteName: defaultTitle,
       title: page.title ?? defaultTitle,
-      type: "website",
+      type: "article",
       url: process.env.NEXT_PUBLIC_SITE_URL,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        nocache: false,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   }
 }
