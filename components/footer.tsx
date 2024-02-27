@@ -5,9 +5,9 @@ export function Footer() {
     <footer className="mt-24 flex justify-center">
       <div className="space-y-12 pt-16">
         <nav className="space-x-6 text-center text-sm font-medium">
-          <Link href="/">커뮤니티</Link>
+          <Link href="/">카페</Link>
           <Link href="/pages/about">소개</Link>
-          <Link href="/pages/contact">연락하기</Link>
+          <Link href={`mailto:${process.env.ADMIN_EMAIL}`}>연락하기</Link>
           <Link href="https://github.com/headache-place">GitHub</Link>
         </nav>
 

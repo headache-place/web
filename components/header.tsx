@@ -41,9 +41,8 @@ export function Header() {
             <div className="hidden sm:ml-12 sm:flex sm:items-center">
               <div className="space-x-6 text-base font-bold">
                 <Link href="/pages/about">소개</Link>
-                <Link href="/pages/rules">규칙 및 가이드</Link>
-                <Link href="/pages/chats">회원용 채팅방</Link>
-                <Link href="/pages/contacts">연락하기</Link>
+                <Link href="/pages/rules">이용 및 운영 규칙</Link>
+                <Link href={`mailto:${process.env.ADMIN_EMAIL}`}>연락하기</Link>
               </div>
             </div>
           </div>
@@ -63,16 +62,14 @@ export function Header() {
         </div>
         <div>
           <Link onClick={toggleMobileMenu} href="/pages/rules">
-            규칙 및 가이드
+            이용 및 운영 규칙
           </Link>
         </div>
         <div>
-          <Link onClick={toggleMobileMenu} href="/pages/chats">
-            회원용 채팅방
-          </Link>
-        </div>
-        <div>
-          <Link onClick={toggleMobileMenu} href="/pages/contacts">
+          <Link
+            onClick={toggleMobileMenu}
+            href={`mailto:${process.env.ADMIN_EMAIL}`}
+          >
             연락하기
           </Link>
         </div>
