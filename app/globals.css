@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 프리즘 및 폰트 */
+@import "../node_modules/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+@import "../assets/css/prism-dracula.css";
+
+/* UI 컴포넌트 대응 */
+@layer base {
+  :root {
+    --radius: 1rem;
+    --background: #333333;
+    --foreground: #eaeaea;
+    --primary: #e1c8ff;
+    --primary-foreground: #602286;
+  }
+
+  .logo {
+    border-radius: 25%;
+  }
+
+  html {
+    /* Typography: 한국어는 Word Break에 조심해야함. */
+    word-break: keep-all;
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
+      BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+      "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  }
+}
