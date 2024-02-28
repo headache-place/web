@@ -91,7 +91,7 @@ export default async function Page({ params }: TPageProps) {
   const updatedAt = parseISO(page.updatedAt)
   const formattedDate = isSameDay(createdAt, updatedAt)
     ? `${format(createdAt, "yyyy년 MM월 dd일")} 작성`
-    : `${format(updatedAt, "yyyy년 MM월 dd일")}} 업데이트, ${format(
+    : `${format(updatedAt, "yyyy년 MM월 dd일")} 업데이트, ${format(
         createdAt,
         "yyyy년 MM월 dd일"
       )} 작성`
