@@ -42,7 +42,9 @@ export function Header() {
               <div className="space-x-6 text-base font-bold">
                 <Link href="/pages/about">소개</Link>
                 <Link href="/pages/rules">이용 및 운영 규칙</Link>
-                <Link href={`mailto:${process.env.ADMIN_EMAIL}`}>연락하기</Link>
+                <Link href={`mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`}>
+                  연락하기
+                </Link>
               </div>
             </div>
           </div>
@@ -68,7 +70,7 @@ export function Header() {
         <div>
           <Link
             onClick={toggleMobileMenu}
-            href={`mailto:${process.env.ADMIN_EMAIL}`}
+            href={`mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`}
           >
             연락하기
           </Link>

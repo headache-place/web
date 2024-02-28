@@ -7,7 +7,9 @@ export function Footer() {
         <nav className="space-x-6 text-center text-sm font-medium">
           <Link href="/">카페</Link>
           <Link href="/pages/about">소개</Link>
-          <Link href={`mailto:${process.env.ADMIN_EMAIL}`}>연락하기</Link>
+          <Link href={`mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`}>
+            연락하기
+          </Link>
           <Link href="https://github.com/headache-place">GitHub</Link>
         </nav>
 
