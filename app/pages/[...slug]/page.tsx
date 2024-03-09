@@ -46,11 +46,11 @@ export async function generateMetadata({ params }: TPageProps) {
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
     title: page.title ?? defaultTitle,
-    description: page.description ?? defaultDescription,
+    description: (page.description ?? defaultDescription).slice(0, 150),
     keywords: [new Set(...defaultKeywords, ...page.keywords)],
     creator: defaultTitle,
     openGraph: {
-      description: page.description ?? defaultDescription,
+      description: (page.description ?? defaultDescription).slice(0, 150),
       locale: "ko_KR",
       siteName: defaultTitle,
       title: page.title ?? defaultTitle,

@@ -25,7 +25,10 @@ async function fetchArticleMetadata(articleId: number) {
   // UTC to KST
   const createdAt = addHours(new Date(response.result.article.writeDate), 9)
   // HTML to Human Readable Text
-  const description = convert(response.result.article.contentHtml).slice(0, 300)
+  const description = convert(response.result.article.contentHtml)
+    .split("\n")
+    .join(" ")
+    .slice(0, 150)
 
   return {
     title: response.result.article.subject,
@@ -64,7 +67,7 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
     title: page.title,
-    description: page.description.slice(0, 300),
+    description: page.description,
     keywords: page.keywords,
     creator: siteName,
     authors: [{ name: page.author.nick }],
