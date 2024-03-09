@@ -38,12 +38,19 @@ export async function GET(_: Request) {
     )
   }
 
-  return getServerSideSitemapIndex([
+  return getServerSideSitemapIndex(
+    [
+      {
+        url: BASE_URL.toString(),
+        changeFrequency,
+        priority,
+      },
+      ...pages,
+    ],
     {
-      url: BASE_URL.toString(),
-      changeFrequency,
-      priority,
-    },
-    ...pages,
-  ])
+      "Cache-Control": "max-age=60",
+      "CDN-Cache-Control": "max-age=600",
+      "Vercel-CDN-Cache-Control": "max-age=3600",
+    }
+  )
 }

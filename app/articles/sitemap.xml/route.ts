@@ -112,5 +112,9 @@ export async function GET(_: Request) {
     )
   )
 
-  return getServerSideSitemapIndex(locations)
+  return getServerSideSitemapIndex(locations, {
+    "Cache-Control": "max-age=60",
+    "CDN-Cache-Control": "max-age=600",
+    "Vercel-CDN-Cache-Control": "max-age=3600",
+  })
 }
