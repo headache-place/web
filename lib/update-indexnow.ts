@@ -30,9 +30,13 @@ export async function submitSingleUrl({
     },
   })
 
-  const data = await response.json()
   if (!response.ok) {
-    console.log(url.toString(), response.status, response.headers, data)
+    console.log(
+      url.toString(),
+      response.status,
+      response.headers,
+      await response.text()
+    )
   }
 }
 
@@ -66,8 +70,12 @@ export async function submitMultipleUrls({
     },
   })
 
-  const data = await response.json()
   if (!response.ok) {
-    console.log(url.toString(), response.status, response.headers, data)
+    console.log(
+      url.toString(),
+      response.status,
+      response.headers,
+      await response.text()
+    )
   }
 }
