@@ -12,8 +12,8 @@
     --radius: 1rem;
     --background: #333333;
     --foreground: #eaeaea;
-    --primary: #e1c8ff;
-    --primary-foreground: #602286;
+    --primary: #602286;
+    --primary-foreground: #e1c8ff;
   }
 
   .logo {
