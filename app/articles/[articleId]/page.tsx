@@ -1,3 +1,5 @@
+import "../../smart-editor.desktop.css"
+
 import { type Metadata } from "next"
 import { redirect } from "next/navigation"
 import { addHours, format } from "date-fns"
@@ -5,6 +7,7 @@ import { convert } from "html-to-text"
 
 import { fetchArticleAsync } from "@/lib/naver-cafe/fetch-article"
 import { RedirectExceptBot } from "@/components/redirect"
+import { SmartEditorEscaper } from "@/components/smart-editor-escaper"
 
 interface TArticleProps {
   params: {
@@ -112,15 +115,16 @@ export default async function Article({
           <h1 className="mb-2 text-4xl font-extrabold text-foreground">
             {page.title}
           </h1>
-          <p className="mb-6 mt-0 text-xl text-foreground">
-            {page.author.nick}
+          <p className="mb-3 mt-0 text-xl text-foreground">
+            <b>작성자:</b> {page.author.nick}
           </p>
           <p className="mb-3 mt-0 text-sm text-foreground">
-            {format(new Date(page.createdAt), "yyyy년 MM월 dd일")} 작성
+            <b>작성일:</b>{" "}
+            {format(new Date(page.createdAt), "yyyy년 MM월 dd일")}
           </p>
         </header>
         <hr className="my-6" />
-        <div dangerouslySetInnerHTML={{ __html: page.html }} />
+        <SmartEditorEscaper html={page.html} />
       </article>
       <RedirectExceptBot url={url} />
     </>
