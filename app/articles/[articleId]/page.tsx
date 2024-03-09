@@ -1,7 +1,9 @@
 import { type Metadata } from "next"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { addHours, format } from "date-fns"
 import { convert } from "html-to-text"
+import { isbot } from "isbot"
 
 import { fetchArticleAsync } from "@/lib/naver-cafe/fetch-article"
 import { Redirect } from "@/components/redirect"
@@ -92,16 +94,6 @@ export async function generateMetadata({
   }
 }
 
-const sandboxes = [
-  "allow-top-navigation",
-  "allow-forms",
-  "allow-modals",
-  "allow-popups",
-  "allow-same-origin",
-  "allow-scripts",
-  "allow-storage-access-by-user-activation",
-]
-
 export default async function Article({
   params: { articleId },
 }: TArticleProps) {
@@ -112,9 +104,18 @@ export default async function Article({
     return redirect(url)
   }
 
-  return (
+  // TODO: React 내 If문 처리 개선
+  const redirectionFragment = !isbot(headers().get("User-Agent")) ? (
     <>
       <Redirect url={url} />
+    </>
+  ) : (
+    <></>
+  )
+
+  return (
+    <>
+      {redirectionFragment}
       <article className="mx-4">
         <header>
           <h1 className="mb-2 text-4xl font-extrabold text-foreground">
