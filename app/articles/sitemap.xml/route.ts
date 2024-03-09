@@ -1,10 +1,10 @@
-import { type MetadataRoute } from "next"
-
 import {
   listArticlesByMenuId,
   type IArticleInfo,
 } from "@/lib/naver-cafe/list-articles"
 import { listMenus } from "@/lib/naver-cafe/list-menus"
+import { getServerSideSitemapIndex } from "@/lib/render-sitemap"
+import { INDEXNOW_ENDPOINTS, submitMultipleUrls } from "@/lib/update-indexnow"
 
 const BASE_URL = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "")
 
@@ -76,15 +76,19 @@ async function getArticlesByMenuId(
   return items
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export const revalidate = 3600
+export const fetchCache = "auto"
+export const dynamicParams = false
+
+export async function GET(_: Request) {
   const cafeId = Number.parseInt(process.env.NAVER_CAFE_ID!)
   const { menus } = await listMenus(cafeId)
 
   if (!menus) {
-    return []
+    return getServerSideSitemapIndex([])
   }
 
-  return (
+  const locations = (
     await Promise.all(
       menus.map((menu) => getArticlesByMenuId(cafeId, menu.menuId))
     )
@@ -96,4 +100,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority,
       url,
     }))
+
+  await Promise.all(
+    INDEXNOW_ENDPOINTS.map((endpoint) =>
+      submitMultipleUrls({
+        apiEndpoint: endpoint,
+        apiKey: process.env.INDEXNOW_KEY!,
+        newPages: locations.map((location) => location.url),
+        siteHost: BASE_URL,
+      })
+    )
+  )
+
+  return getServerSideSitemapIndex(locations)
 }
