@@ -1,5 +1,6 @@
 import "./globals.css"
 
+import { type Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -24,7 +25,7 @@ const defaultKeywords = [
   "환자 모임",
 ]
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
   title: {
     default: defaultTitle,
@@ -40,6 +41,12 @@ export const metadata = {
     title: defaultTitle,
     description,
     siteName: defaultTitle,
+    images: [
+      {
+        url: "/ci/logo.svg",
+        type: "image/svg",
+      },
+    ],
   },
   manifest: "/icon/manifest.json",
   icons: {
