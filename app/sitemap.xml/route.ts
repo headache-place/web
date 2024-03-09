@@ -6,6 +6,7 @@ import { INDEXNOW_ENDPOINTS, submitMultipleUrls } from "@/lib/update-indexnow"
 
 export const revalidate = false
 export const fetchCache = "force-cache"
+export const dynamic = "force-dynamic"
 
 const BASE_URL = new URL("/", process.env.NEXT_PUBLIC_SITE_URL)
 

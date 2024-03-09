@@ -78,7 +78,7 @@ async function getArticlesByMenuId(
 
 export const revalidate = 3600
 export const fetchCache = "auto"
-export const dynamicParams = false
+export const dynamic = "force-dynamic"
 
 export async function GET(_: Request) {
   const cafeId = Number.parseInt(process.env.NAVER_CAFE_ID!)
