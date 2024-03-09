@@ -39,11 +39,6 @@ export async function GET(_: Request) {
         changeFrequency,
         priority,
       },
-      {
-        url: new URL(`/indexnow/${process.env.INDEXNOW_KEY}.txt`).toString(),
-        changeFrequency: "never",
-        priority: 0.1,
-      },
       ...pages,
     ],
     {

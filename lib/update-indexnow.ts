@@ -20,7 +20,7 @@ export async function submitSingleUrl({
   const params = new URLSearchParams({
     url: newPage,
     key: apiKey,
-    keyLocation: new URL(`/indexnow/${apiKey}.txt`, siteHost).toString(),
+    keyLocation: new URL(`/indexnow.txt`, siteHost).toString(),
   })
   const url = new URL(`/indexnow?${params.toString()}`, apiEndpoint)
   const response = await fetch(url, {
@@ -54,14 +54,15 @@ export async function submitMultipleUrls({
   revalidate?: false | number
 }) {
   const url = new URL(`/indexnow`, apiEndpoint)
+  const body = JSON.stringify({
+    host: new URL(siteHost).hostname,
+    key: apiKey,
+    keyLocation: new URL(`/indexnow.txt`, siteHost).toString(),
+    urlList: newPages,
+  })
   const response = await fetch(url, {
     method: "POST",
-    body: JSON.stringify({
-      host: new URL(siteHost).hostname,
-      key: apiKey,
-      keyLocation: new URL(`/indexnow/${apiKey}.txt`, siteHost).toString(),
-      urlList: newPages,
-    }),
+    body,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
@@ -73,6 +74,7 @@ export async function submitMultipleUrls({
   if (!response.ok) {
     console.log(
       url.toString(),
+      body,
       response.status,
       response.headers,
       await response.text()
