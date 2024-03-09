@@ -1,5 +1,5 @@
 import { allPages } from "contentlayer/generated"
-import { differenceInDays, parseISO } from "date-fns"
+import { parseISO } from "date-fns"
 
 import { getServerSideSitemapIndex } from "@/lib/render-sitemap"
 import { INDEXNOW_ENDPOINTS, submitMultipleUrls } from "@/lib/update-indexnow"
@@ -21,22 +21,16 @@ export async function GET(_: Request) {
     url: new URL(`/pages/${page.slugAsParams}`, BASE_URL.toString()).toString(),
   }))
 
-  const newPages = pages.filter(
-    (page) => differenceInDays(new Date(), page.lastModified) > 1
-  )
-
-  if (newPages.length !== 0) {
-    await Promise.all(
-      INDEXNOW_ENDPOINTS.map((endpoint) =>
-        submitMultipleUrls({
-          apiEndpoint: endpoint,
-          apiKey: process.env.INDEXNOW_KEY!,
-          newPages: newPages.map((page) => page.url),
-          siteHost: BASE_URL,
-        })
-      )
+  await Promise.all(
+    INDEXNOW_ENDPOINTS.map((endpoint) =>
+      submitMultipleUrls({
+        apiEndpoint: endpoint,
+        apiKey: process.env.INDEXNOW_KEY!,
+        newPages: pages.map((page) => page.url),
+        siteHost: BASE_URL,
+      })
     )
-  }
+  )
 
   return getServerSideSitemapIndex(
     [

@@ -23,13 +23,17 @@ export async function submitSingleUrl({
     keyLocation: new URL(`/indexnow/${apiKey}.txt`, siteHost).toString(),
   })
   const url = new URL(`/indexnow?${params.toString()}`, apiEndpoint)
-
-  return fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     next: {
       revalidate,
     },
   })
+
+  const data = await response.json()
+  if (!response.ok) {
+    console.log(url.toString(), response.status, response.headers, data)
+  }
 }
 
 export async function submitMultipleUrls({
@@ -46,8 +50,7 @@ export async function submitMultipleUrls({
   revalidate?: false | number
 }) {
   const url = new URL(`/indexnow`, apiEndpoint)
-
-  return fetch(url, {
+  const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
       host: new URL(siteHost).hostname,
@@ -62,4 +65,9 @@ export async function submitMultipleUrls({
       revalidate,
     },
   })
+
+  const data = await response.json()
+  if (!response.ok) {
+    console.log(url.toString(), response.status, response.headers, data)
+  }
 }
