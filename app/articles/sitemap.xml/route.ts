@@ -1,8 +1,8 @@
 import {
-  listArticlesByMenuId,
+  listArticlesByMenuIdAsync,
   type IArticleInfo,
 } from "@/lib/naver-cafe/list-articles"
-import { listMenus } from "@/lib/naver-cafe/list-menus"
+import { listMenusAsync } from "@/lib/naver-cafe/list-menus"
 import { getServerSideSitemapIndex } from "@/lib/render-sitemap"
 import { INDEXNOW_ENDPOINTS, submitMultipleUrls } from "@/lib/update-indexnow"
 
@@ -45,7 +45,7 @@ async function getArticlesByMenuId(
 
   const items: IArticleInfoResult[] = []
   while (true) {
-    const { result } = await listArticlesByMenuId(params)
+    const { result } = await listArticlesByMenuIdAsync(params)
     if (!result) {
       break
     }
@@ -82,7 +82,7 @@ export const dynamic = "force-dynamic"
 
 export async function GET(_: Request) {
   const cafeId = Number.parseInt(process.env.NAVER_CAFE_ID!)
-  const { menus } = await listMenus(cafeId)
+  const { menus } = await listMenusAsync(cafeId)
 
   if (!menus) {
     return getServerSideSitemapIndex([])

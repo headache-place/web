@@ -22,7 +22,7 @@ export interface IMenu {
   hasRegion: boolean
 }
 
-export async function listMenus(cafeId: number) {
+export async function listMenusAsync(cafeId: number) {
   const response = await fetch(
     `https://apis.naver.com/cafe-web/cafe2/SideMenuList?cafeId=${cafeId}`,
     {
@@ -31,7 +31,8 @@ export async function listMenus(cafeId: number) {
         Accept: "application/json, text/plain, */*",
       },
       next: {
-        revalidate: 60 * 60,
+        revalidate: 60 * 60 * 5,
+        tags: ["listMenus"],
       },
     }
   )

@@ -1,12 +1,13 @@
 import "../../smart-editor.desktop.css"
 
 import { type Metadata } from "next"
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { addHours, format } from "date-fns"
 import { convert } from "html-to-text"
 
 import { fetchArticleAsync } from "@/lib/naver-cafe/fetch-article"
-import { RedirectExceptBot } from "@/components/redirect"
+import { Redirect } from "@/components/redirect"
 import { SmartEditorEscaper } from "@/components/smart-editor-escaper"
 
 interface TArticleProps {
@@ -15,7 +16,21 @@ interface TArticleProps {
   }
 }
 
-async function fetchArticleMetadata(articleId: number) {
+interface IArticle {
+  title: string
+  description: string
+  html: string
+  keywords: string[]
+  author: {
+    id: string
+    nick: string
+  }
+  createdAt: Date
+}
+
+async function fetchArticleMetadata(
+  articleId: number
+): Promise<IArticle | undefined> {
   if (!process.env.NAVER_CAFE_ID) return undefined
 
   const response = await fetchArticleAsync({
@@ -98,9 +113,27 @@ export async function generateMetadata({
   }
 }
 
-export default async function Article({
-  params: { articleId },
-}: TArticleProps) {
+async function Article({ page }: { page: IArticle }) {
+  return (
+    <article className="mx-4">
+      <header>
+        <h1 className="mb-2 text-4xl font-extrabold text-foreground">
+          {page.title}
+        </h1>
+        <p className="mb-3 mt-0 text-xl text-foreground">
+          <b>작성자:</b> {page.author.nick}
+        </p>
+        <p className="mb-3 mt-0 text-sm text-foreground">
+          <b>작성일:</b> {format(new Date(page.createdAt), "yyyy년 MM월 dd일")}
+        </p>
+      </header>
+      <hr className="my-6" />
+      <SmartEditorEscaper html={page.html} />
+    </article>
+  )
+}
+
+export default async function Page({ params: { articleId } }: TArticleProps) {
   const url = `https://cafe.naver.com/${process.env.NAVER_CAFE_URL}/${articleId}`
   const ignoreByCookie = cookies().has("AutoRedirect")
 
@@ -111,22 +144,7 @@ export default async function Article({
 
   return (
     <>
-      <article className="mx-4">
-        <header>
-          <h1 className="mb-2 text-4xl font-extrabold text-foreground">
-            {page.title}
-          </h1>
-          <p className="mb-3 mt-0 text-xl text-foreground">
-            <b>작성자:</b> {page.author.nick}
-          </p>
-          <p className="mb-3 mt-0 text-sm text-foreground">
-            <b>작성일:</b>{" "}
-            {format(new Date(page.createdAt), "yyyy년 MM월 dd일")}
-          </p>
-        </header>
-        <hr className="my-6" />
-        <SmartEditorEscaper html={page.html} />
-      </article>
+      <Article page={page} />
       <Redirect
         url={url}
         ignoreParamKey="noredirect"

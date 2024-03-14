@@ -55,7 +55,7 @@ export interface IArticleInfo {
 }
 
 // 네이버 게시물 목록 조회
-export async function listArticlesByMenuId({
+export async function listArticlesByMenuIdAsync({
   cafeId,
   menuId,
   page,
@@ -84,7 +84,11 @@ export async function listArticlesByMenuId({
       Accept: "application/json, text/plain, */*",
     },
     next: {
-      revalidate: 0,
+      revalidate: 30,
+      tags: [
+        "listArticlesByMenuId",
+        `listArticlesByMenuId:${menuId}:${page}-${perPage}:${queryType}`,
+      ],
     },
   })
 

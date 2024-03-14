@@ -68,6 +68,7 @@ export async function fetchArticleAsync({
       },
       next: {
         revalidate: 60 * 60,
+        tags: ["fetchArticle", `fetchArticle:${articleId}`],
       },
     }
   )
