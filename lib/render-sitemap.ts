@@ -24,7 +24,7 @@ export function getServerSideSitemapIndex(
           "<sitemap>",
           `<loc>${location.url}</loc>`,
           location.changeFrequency &&
-            `<chagefreq>${location.changeFrequency}</chagefreq>`,
+            `<changefreq>${location.changeFrequency}</changefreq>`,
           location.lastModified &&
             `<lastmod>${format(location.lastModified, "yyyy-MM-dd'T'HH:mm:ss'Z'")}</lastmod>`,
           location.priority && `<priority>${location.priority}</priority>`,
