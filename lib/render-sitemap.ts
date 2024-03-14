@@ -17,22 +17,22 @@ export function getServerSideSitemapIndex(
 ) {
   const contents = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...locations
       .map((location) =>
         [
-          "<sitemap>",
+          "<url>",
           `<loc>${location.url}</loc>`,
           location.changeFrequency &&
             `<changefreq>${location.changeFrequency}</changefreq>`,
           location.lastModified &&
             `<lastmod>${format(location.lastModified, "yyyy-MM-dd'T'HH:mm:ss'Z'")}</lastmod>`,
           location.priority && `<priority>${location.priority}</priority>`,
-          "</sitemap>",
+          "</url>",
         ].filter((item) => item !== undefined)
       )
       .flat(),
-    "</sitemapindex>",
+    "</urlset>",
   ].join("\n")
 
   // Return response
