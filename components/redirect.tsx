@@ -1,35 +1,38 @@
 "use client"
 
 import { useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { isbot } from "isbot"
 
 import { isHeadless } from "@/lib/detect-headless"
 
-export function Redirect({ delay = 0, url }: { delay?: number; url: string }) {
-  useEffect(() => {
-    setTimeout(() => {
-      location.href = url
-    }, delay)
-  }, [delay, url])
-
-  return <></>
-}
-
-export function RedirectExceptBot({
+export function Redirect({
   delay = 0,
+  forceIgnore = false,
+  checkBotOrHeadless = false,
+  ignoreParamKey,
   url,
 }: {
   delay?: number
+  forceIgnore?: boolean
+  checkBotOrHeadless?: boolean
+  ignoreParamKey?: string
   url: string
 }) {
+  const params = useSearchParams()
+
   useEffect(() => {
-    // NOTE: Bot and Headless Detection in Client-level JavaScript
-    if (!isbot(navigator.userAgent) && !isHeadless()) {
+    const isBotOrHeadless =
+      !checkBotOrHeadless || (!isbot(navigator.userAgent) && !isHeadless())
+    const ignoreRedirect =
+      !ignoreParamKey || (ignoreParamKey && params.get(ignoreParamKey))
+
+    if (forceIgnore || (isBotOrHeadless && !ignoreRedirect)) {
       setTimeout(() => {
         location.href = url
       }, delay)
     }
-  }, [delay, url])
+  }, [checkBotOrHeadless, delay, forceIgnore, ignoreParamKey, params, url])
 
   return <></>
 }

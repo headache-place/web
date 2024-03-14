@@ -102,6 +102,7 @@ export default async function Article({
   params: { articleId },
 }: TArticleProps) {
   const url = `https://cafe.naver.com/${process.env.NAVER_CAFE_URL}/${articleId}`
+  const ignoreByCookie = cookies().has("AutoRedirect")
 
   const page = await fetchArticleMetadata(articleId)
   if (!page) {
@@ -126,7 +127,12 @@ export default async function Article({
         <hr className="my-6" />
         <SmartEditorEscaper html={page.html} />
       </article>
-      <RedirectExceptBot url={url} />
+      <Redirect
+        url={url}
+        ignoreParamKey="noredirect"
+        checkBotOrHeadless={true}
+        forceIgnore={ignoreByCookie}
+      />
     </>
   )
 }
