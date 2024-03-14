@@ -1,12 +1,12 @@
 import "./globals.css"
 
 import { type Metadata } from "next"
+import { cookies, headers } from "next/headers"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
-import { ThemeProvider } from "@/components/theme-provider"
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -118,20 +118,23 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const cookieStore = cookies()
+  const accessedFromKorea = (
+    headers().get("CF-IPCountry") ?? "KR"
+  ).toLowerCase()
+
+  if (cookieStore.has("AutoRedirect") && !accessedFromKorea) {
+    cookieStore.set("AutoRedirect", "false", { expires: 2 ^ (31 - 1) })
+  }
+
   return (
     <html lang="ko">
-      <body className={"min-h-screen bg-background font-sans antialiased"}>
-        <ThemeProvider
-          attribute="class"
-          enableSystem={false}
-          forcedTheme="dark"
-        >
-          <div className="mx-auto max-w-3xl px-4 py-10">
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </div>
-        </ThemeProvider>
+      <body className={"dark min-h-screen bg-background font-sans antialiased"}>
+        <div className="mx-auto max-w-3xl px-4 py-10">
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </div>
         <SpeedInsights />
         <Analytics />
       </body>

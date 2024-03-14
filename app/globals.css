@@ -6,6 +6,19 @@
 @import "../node_modules/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 @import "../assets/css/prism-dracula.css";
 
+/* 다크 모드 강제 적용 */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: dark;
+  }
+}
+
 /* UI 컴포넌트 대응 */
 @layer base {
   :root {
