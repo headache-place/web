@@ -12,7 +12,7 @@ const BASE_URL = new URL("/", process.env.NEXT_PUBLIC_SITE_URL)
 
 export async function GET(_: Request) {
   const changeFrequency: "weekly" = "weekly"
-  const priority = 1
+  const priority = 0.7
 
   const pages = allPages.map((page) => ({
     changeFrequency,
