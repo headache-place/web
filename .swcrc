@@ -1,5 +1,7 @@
 {
   "env": {
-    "targets": "> 0.2%, last 3 versions, not dead"
+    "targets": "> 0.2%, last 3 versions, not dead",
+    "mode": "usage",
+    "coreJs": 3
   }
 }

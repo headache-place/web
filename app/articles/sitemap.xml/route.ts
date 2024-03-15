@@ -1,4 +1,8 @@
-import { type Redis } from "@upstash/redis"
+import "core-js/proposals/set-methods"
+import "core-js/full/set/map"
+
+import type { Redis } from "@upstash/redis"
+import { formatISO } from "date-fns"
 
 import {
   listArticlesByMenuIdAsync,
@@ -38,7 +42,8 @@ function calculatePriority(info: IArticleInfo) {
 async function getArticlesByMenuId(
   redis: Redis,
   cafeId: number,
-  menuId: number
+  menuId: number,
+  cache: number = 60 * 60 * 4
 ): Promise<IArticleInfoResult[]> {
   let params = {
     cafeId,
@@ -62,24 +67,28 @@ async function getArticlesByMenuId(
 
     const { articleList, hasNext } = result
     if (params.page === 1) {
-      const cachedArticleIds = new Set(await redis.get<number[]>(pageKeyName))
       const targetArticleIds = new Set(
         articleList.map((article) => article.articleId).toSorted()
       )
 
-      const sameResult =
-        cachedArticleIds.size !== 0 &&
-        cachedArticleIds.isSupersetOf(targetArticleIds) &&
-        cachedArticleIds.isSupersetOf(targetArticleIds)
+      if (await redis.exists(pageKeyName, keyName)) {
+        const cachedArticleIds = new Set(await redis.get<number[]>(pageKeyName))
+        if (
+          cachedArticleIds.isSupersetOf(targetArticleIds) &&
+          cachedArticleIds.isSubsetOf(targetArticleIds)
+        ) {
+          items.push(
+            ...((await redis.get<IArticleInfoResult[]>(keyName)) ?? [])
+          )
 
-      // 결과가 같으면 Redis에 이미 결과가 있는지 체크한 다음, 그대로 반환.
-      if (sameResult && (await redis.exists(keyName))) {
-        items.push(...((await redis.get<IArticleInfoResult[]>(keyName)) ?? []))
-        return items
+          // TODO: 로그 개선
+          console.log(`Redis - Cache Hit: ${keyName}, ${formatISO(new Date())}`)
+          return items
+        }
       }
 
       await redis.set(pageKeyName, Array.from(targetArticleIds), {
-        ex: revalidate,
+        ex: cache,
       })
     }
 
@@ -105,13 +114,11 @@ async function getArticlesByMenuId(
     }
   }
 
-  await redis.set(keyName, items, { ex: revalidate })
+  await redis.set(keyName, items, { ex: cache })
   return items
 }
 
-// cache는 4시간으로 처리, Redis도 같이 사용함.
-export const revalidate = 60 * 60 * 4
-export const fetchCache = "auto"
+export const revalidate = 0
 export const dynamic = "force-dynamic"
 
 export async function GET(_: Request) {
@@ -128,10 +135,17 @@ export async function GET(_: Request) {
   )
 
   const locations = (
-    await Promise.all(
+    await Promise.allSettled(
       menus.map((menu) => getArticlesByMenuId(redis, cafeId, menu.menuId))
     )
   )
+    .filter((item) => {
+      if (item.status === "rejected") {
+        console.log(item.reason)
+      }
+      return item.status === "fulfilled"
+    })
+    .map((item) => (item as PromiseFulfilledResult<IArticleInfoResult[]>).value)
     .flat()
     .sort((x, y) => x.articleId - y.articleId)
     .map(({ changeFrequency, priority, url }) => ({
