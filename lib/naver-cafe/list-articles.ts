@@ -87,7 +87,9 @@ export async function listArticlesByMenuIdAsync({
       revalidate: 30,
       tags: [
         "listArticlesByMenuId",
-        `listArticlesByMenuId:${menuId}:${page}-${perPage}:${queryType}`,
+        `listArticlesByMenuId:${menuId}`,
+        `listArticlesByMenuId:${menuId}:${queryType}`,
+        `listArticlesByMenuId:${menuId}:${queryType}:${page}-${perPage}`,
       ],
     },
   })
